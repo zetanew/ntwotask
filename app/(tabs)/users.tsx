@@ -3,6 +3,8 @@ import { View, Text, Image, TextInput, FlatList, StyleSheet, Alert } from 'react
 import { Ionicons } from '@expo/vector-icons';
 import { instance, endpoints } from '../../api/apiConfig';
 import styles from '../../styles/styles';
+import userStore from '../../stores/UserStore'; // adjust the path based on your project structure
+import { observer } from 'mobx-react';
 
 type User = {
   id: number;
@@ -20,7 +22,6 @@ type User = {
     name: string;
   };
   website: string;
-
 };
 
 const localStyles = StyleSheet.create({
@@ -50,9 +51,24 @@ const localStyles = StyleSheet.create({
     top: 10,
     right: 10,
   },
+  favoriteIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 40,
+  },
 });
 
-function UserCard({ user }: { user: User }) {
+const UserCard = observer(({ user }: { user: User }) => {
+  const isFavorite = userStore.favorites.some(favorite => favorite.id === user.id);
+
+  const toggleFavorite = () => {
+    if (isFavorite) {
+      userStore.removeFavorite(user);
+    } else {
+      userStore.addFavorite(user);
+    }
+  };
+
   const showAdditionalInfo = () => {
     Alert.alert(
       'Ayrıntılar',
@@ -70,10 +86,11 @@ function UserCard({ user }: { user: User }) {
         <Text style={[styles.smallText, localStyles.textWithMargin]}>{user.email}</Text>
         <Text style={styles.smallText}>{user.phone}</Text>
       </View>
+      <Ionicons name={isFavorite ? "heart" : "heart-outline"} size={24} color="black" style={localStyles.favoriteIcon} onPress={toggleFavorite} />
       <Ionicons name="information-circle-outline" size={24} color="black" style={localStyles.menuIcon} onPress={showAdditionalInfo} />
     </View>
   );
-}
+});
 
 export default function Users() {
   const [users, setUsers] = useState<User[]>([]);

@@ -26,6 +26,7 @@
     "expo-system-ui": "~2.9.3",
     "expo-web-browser": "~12.8.2",
     "mobx": "^6.12.3",
+    "mobx-react": "^9.1.1",
     "mobx-react-lite": "^4.0.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
