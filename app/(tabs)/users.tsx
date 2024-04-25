@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TextInput, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Image, TextInput, FlatList, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { instance, endpoints } from '../../api/apiConfig';
 import styles from '../../styles/styles';
@@ -10,7 +10,17 @@ type User = {
   username: string;
   email: string;
   phone: string;
-  // add other fields if necessary
+  address: {
+    street: string;
+    suite: string;
+    city: string;
+    zipcode: string;
+  };
+  company: {
+    name: string;
+  };
+  website: string;
+
 };
 
 const localStyles = StyleSheet.create({
@@ -43,6 +53,15 @@ const localStyles = StyleSheet.create({
 });
 
 function UserCard({ user }: { user: User }) {
+  const showAdditionalInfo = () => {
+    Alert.alert(
+      'Ayrıntılar',
+      `👤 Kullanıcı: ${user.username}\n📧 Email: ${user.email}\n📞 Telefon: ${user.phone}\n🏠 Adres: ${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipcode}\n🏢 İş Yeri: ${user.company.name}\n🌐 Website: ${user.website}`,
+      [{ text: 'Tamam', onPress: () => console.log(' basildi') }],
+      { cancelable: false },
+    );
+  };
+
   return (
     <View style={localStyles.card}>
       <Image source={{ uri: `https://robohash.org/${user.id}` }} style={{ width: 50, height: 50, marginRight: 10 }} />
@@ -51,7 +70,7 @@ function UserCard({ user }: { user: User }) {
         <Text style={[styles.smallText, localStyles.textWithMargin]}>{user.email}</Text>
         <Text style={styles.smallText}>{user.phone}</Text>
       </View>
-      <Ionicons name="information-circle-outline" size={24} color="black" style={localStyles.menuIcon} onPress={() => {}} />
+      <Ionicons name="information-circle-outline" size={24} color="black" style={localStyles.menuIcon} onPress={showAdditionalInfo} />
     </View>
   );
 }
