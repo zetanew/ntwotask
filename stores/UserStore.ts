@@ -37,6 +37,10 @@ class UserStore {
     this.saveFavorites();
   }
 
+  removeFavoriteById(id: number) {
+    this.favorites = this.favorites.filter(user => user.id !== id);
+  } // for Favorites.tsx
+
   loadFavorites = async () => {
     const favorites = await AsyncStorage.getItem('favorites');
     if (favorites) {
