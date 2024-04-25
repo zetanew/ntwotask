@@ -40,7 +40,7 @@ function PostCard({ post }: { post: Post }) {
 
 export default function Posts() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const itemsPerPage = 10;
 
   const fetchPosts = () => {
@@ -53,8 +53,8 @@ export default function Posts() {
     fetchPosts();
   }, []);
 
-  const paginatedPosts = posts.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-
+  const paginatedPosts = posts.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
+// 1 tane geride kaldi
   return (
     <View style={{ paddingBottom: 50 }}>
       <FlatList
@@ -65,7 +65,7 @@ export default function Posts() {
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
         <Button title="Önceki" onPress={() => setPage(oldPage => Math.max(oldPage - 1, 0))} />
         <Text>Sayfa {page + 1}</Text>
-        <Button title="Sonraki" onPress={() => setPage(oldPage => Math.min(oldPage + 1, Math.ceil(posts.length / itemsPerPage) - 1))} />
+        <Button title="Sonraki" onPress={() => setPage(oldPage => Math.min(oldPage + 1, Math.ceil(posts.length / itemsPerPage) - 1))} /> 
       </View>
     </View>
   );
